@@ -1,0 +1,8 @@
+site_name: AI Design for Revit
+theme:
+  name: material
+nav:
+  - Home: index.md
+  - Agents: agents.md
+  - Revit Plugin: revit_plugin.md
+  - Usage: usage.md
