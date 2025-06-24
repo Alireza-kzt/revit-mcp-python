@@ -7,11 +7,8 @@ from .revit_agent import RevitAgent
 class OrchestratorAgent(SequentialAgent):
     """Pipeline orchestrating the design process."""
 
-    revit_agent: RevitAgent | None = None
-
-    def __init__(self, mcp_url: str) -> None:
-        object.__setattr__(self, "revit_agent", RevitAgent(mcp_url))
+    def __init__(self) -> None:
         super().__init__(
             name="OrchestratorAgent",
-            sub_agents=[InputAgent(), DesignAgent(), RegulationsAgent(), self.revit_agent],
+            sub_agents=[InputAgent(), DesignAgent(), RegulationsAgent(), RevitAgent()],
         )
