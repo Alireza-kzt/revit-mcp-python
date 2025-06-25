@@ -15,6 +15,6 @@ class OrchestratorAgent(SequentialAgent):
                 InputAgent(),
                 DesignAgent(),
                 RegulationsAgent(),
-                # TODO: add RevitAgent() here,
+                RevitAgent(),
             ],
         )
