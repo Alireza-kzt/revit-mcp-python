@@ -6,3 +6,4 @@ nav:
   - Agents: agents.md
   - Revit Plugin: revit_plugin.md
   - Usage: usage.md
+  - MCP: revit_mcp.md
