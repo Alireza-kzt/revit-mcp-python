@@ -1,8 +1,60 @@
-site_name: AI Design for Revit
+site_name: AI-Assisted Architectural Design System
+site_description: Documentation for the AI-Assisted Architectural Design System using ADK, MCP, and Revit.
+site_author: Jules (AI Agent)
+
 theme:
   name: material
+  palette:
+    primary: blue
+    accent: indigo
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+
 nav:
   - Home: index.md
-  - Agents: agents.md
-  - Revit Plugin: revit_plugin.md
-  - Usage: usage.md
+  - System Overview: overview.md
+  - Agents:
+    - InputAgent: agents/input_agent.md
+    - DesignAgent: agents/design_agent.md
+    - RegulationsAgent: agents/regulations_agent.md
+    - OrchestratorAgent: agents/orchestrator_agent.md
+  - Revit Integration:
+    - PyRevit Plugin: revit_integration/pyrevit_plugin.md
+    - MCP Server: revit_integration/mcp_server.md
+  - Usage Guide: usage.md
+  - Development: development.md # Added a page for development notes
+
+# Optional: Add markdown extensions
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - toc:
+      permalink: true
+
+# Optional: Define a repo URL for "Edit on GitHub" links, etc.
+# repo_url: https://github.com/yourusername/your-repo-name
+# repo_name: yourusername/your-repo-name
+# edit_uri: edit/main/docs/
+
+plugins:
+  - search
+#  - mermaid2 # If you plan to use mermaid diagrams
+
+# Copyright
+# copyright: Copyright &copy; 2024 Your Name or Company
+
+# Extra CSS or JS if needed
+# extra_css:
+#   - stylesheets/extra.css
+# extra_javascript:
+#   - javascripts/extra.js

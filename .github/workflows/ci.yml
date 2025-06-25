@@ -1,20 +1,47 @@
-name: CI
+name: Python CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  test:
+  build-and-test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"] # Test against a few relevant Python versions
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install deps
-        run: |
-          pip install -r requirements.txt
-          pip install google-adk fastmcp mkdocs-material
-      - name: Run tests
-        run: pytest -q
-      - name: Build docs
-        run: mkdocs build
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        # pytest and pytest-asyncio are in requirements.txt
+
+    - name: Run tests with pytest
+      env:
+        # Set dummy environment variables that might be expected by the code,
+        # e.g., for LLM API keys or server URLs.
+        # Tests should mock these interactions, but code might check for var existence.
+        # ADK agents might try to initialize default LLM services if not provided,
+        # so a dummy key can prevent errors during test discovery or setup, even if mocks are used.
+        GOOGLE_API_KEY: "test_dummy_key_ci"
+        FASTMCP_SERVER_URL: "http://localhost:8765" # Default, though tests mock MCP
+        AI_DESIGN_ASSISTANT_PATH: "." # For tests, current directory is project root
+      run: |
+        pytest tests/
+
+    - name: Build MkDocs documentation (Optional Check)
+      if: matrix.python-version == '3.11' # Only run on one Python version to save time
+      run: |
+        mkdocs build --strict # --strict treats warnings as errors
