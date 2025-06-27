@@ -14,7 +14,7 @@ from google.adk.tools.mcp_tool.mcp_toolset import (
 # Helper: build the MCP toolset that proxies to revit‑mcp‑python
 # ---------------------------------------------------------------------------
 
-from config import REVIT_MCP_PY_DIR, MODEl
+from config import REVIT_MCP_PY_DIR, MODEL
 
 revit_mcp_toolset = MCPToolset(
     connection_params=StdioServerParameters(
@@ -35,7 +35,7 @@ class StatusCheckAgent(LlmAgent):
     def __init__(self) -> None:
         super().__init__(
             name="RevitStatusChecker",
-            model=MODEl,
+            model=MODEL,
             instruction=(
                 "You are a helper whose sole job is to verify the current connection to "
                 "Autodesk Revit via the MCP server.\n"
@@ -75,7 +75,7 @@ class ConversationAgent(LlmAgent):
     def __init__(self) -> None:
         super().__init__(
             name="RevitConversationAgent",
-            model=MODEl,
+            model=MODEL,
             instruction=MAIN_SYSTEM_MESSAGE,
             tools=[revit_mcp_toolset],
         )
