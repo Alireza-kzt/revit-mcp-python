@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 from typing import AsyncGenerator
 
 from google.adk.agents import BaseAgent, LlmAgent
@@ -15,7 +14,7 @@ from google.adk.tools.mcp_tool.mcp_toolset import (
 # Helper: build the MCP toolset that proxies to revit‑mcp‑python
 # ---------------------------------------------------------------------------
 
-REVIT_MCP_PY_DIR: str = os.getenv("REVIT_MCP_PY_DIR", "./revit-mcp-python")
+from config import REVIT_MCP_PY_DIR
 
 revit_mcp_toolset = MCPToolset(
     connection_params=StdioServerParameters(
