@@ -36,7 +36,7 @@ class StatusCheckAgent(LlmAgent):
     def __init__(self) -> None:
         super().__init__(
             name="RevitStatusChecker",
-            model=os.getenv("MODEL_NAME", "gemini-1.5-pro"),
+            model="gemini-1.5-flash",
             instruction=(
                 "You are a helper whose sole job is to verify the current connection to "
                 "Autodesk Revit via the MCP server.\n"
@@ -76,7 +76,7 @@ class ConversationAgent(LlmAgent):
     def __init__(self) -> None:
         super().__init__(
             name="RevitConversationAgent",
-            model=os.getenv("MODEL_NAME", "gemini-1.5-pro"),
+            model="gemini-1.5-flash",
             instruction=MAIN_SYSTEM_MESSAGE,
             tools=[revit_mcp_toolset],
         )
@@ -89,14 +89,20 @@ class ConversationAgent(LlmAgent):
 
 class RevitAgent(BaseAgent):
     """Custom orchestrator that guarantees connectivity before conversation."""
-
-    status_checker: LlmAgent
-    agent: LlmAgent
+    status_checker: StatusCheckAgent
+    agent: ConversationAgent
+    model_config = {"arbitrary_types_allowed": True}
 
     def __init__(self) -> None:
-        super().__init__(name="RevitAgent")
-        self.status_checker = StatusCheckAgent()
-        self.agent = ConversationAgent()
+        status_checker = StatusCheckAgent()
+        agent = ConversationAgent()
+
+        super().__init__(
+            name="RevitAgent",
+            status_checker=status_checker,
+            agent=agent,
+            sub_agents=[status_checker, agent],
+        )
 
     async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
         # 1) Ensure Revit is reachable
