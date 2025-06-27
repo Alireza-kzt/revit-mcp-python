@@ -29,17 +29,23 @@ revit_mcp_toolset = MCPToolset(
 # Sub‑agent 1: connectivity / context bootstrap
 # ---------------------------------------------------------------------------
 
-status_check_agent = LlmAgent(
-    name="RevitStatusChecker",
-    model=os.getenv("MODEL_NAME", "gemini-1.5-pro"),
-    instruction=(
-        "You are a helper whose sole job is to verify the current connection to "
-        "Autodesk Revit via the MCP server.\n"
-        "Call the function `get_revit_status` without arguments.\n"
-        "If the status response is not OK, apologise and terminate."
-    ),
-    tools=[revit_mcp_toolset],
-)
+
+class StatusCheckAgent(LlmAgent):
+    """Helper agent that verifies the MCP connection."""
+
+    def __init__(self) -> None:
+        super().__init__(
+            name="RevitStatusChecker",
+            model=os.getenv("MODEL_NAME", "gemini-1.5-pro"),
+            instruction=(
+                "You are a helper whose sole job is to verify the current connection to "
+                "Autodesk Revit via the MCP server.\n"
+                "Call the function `get_revit_status` without arguments.\n"
+                "If the status response is not OK, apologise and terminate."
+            ),
+            tools=[revit_mcp_toolset],
+        )
+
 
 # ---------------------------------------------------------------------------
 # Sub‑agent 2: main conversational agent with full toolset
@@ -63,17 +69,23 @@ Guidelines:
    tool calls. Never hallucinate parameters – inspect existing elements first.
 """
 
-conversation_agent = LlmAgent(
-    name="RevitConversationAgent",
-    model=os.getenv("MODEL_NAME", "gemini-1.5-pro"),
-    instruction=MAIN_SYSTEM_MESSAGE,
-    tools=[revit_mcp_toolset],
-)
+
+class ConversationAgent(LlmAgent):
+    """Main conversational agent with full toolset."""
+
+    def __init__(self) -> None:
+        super().__init__(
+            name="RevitConversationAgent",
+            model=os.getenv("MODEL_NAME", "gemini-1.5-pro"),
+            instruction=MAIN_SYSTEM_MESSAGE,
+            tools=[revit_mcp_toolset],
+        )
 
 
 # ---------------------------------------------------------------------------
 # Orchestrator: run status checker then conversation agent
 # ---------------------------------------------------------------------------
+
 
 class RevitAgent(BaseAgent):
     """Custom orchestrator that guarantees connectivity before conversation."""
@@ -83,12 +95,10 @@ class RevitAgent(BaseAgent):
 
     def __init__(self) -> None:
         super().__init__(name="RevitAgent")
-        self.status_checker = status_check_agent
-        self.agent = conversation_agent
+        self.status_checker = StatusCheckAgent()
+        self.agent = ConversationAgent()
 
-    async def _run_async_impl(
-            self, ctx: InvocationContext
-    ) -> AsyncGenerator[Event, None]:
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
         # 1) Ensure Revit is reachable
         async for event in self.status_checker.run_async(ctx):
             yield event
