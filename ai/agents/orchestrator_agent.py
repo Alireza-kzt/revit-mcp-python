@@ -12,7 +12,7 @@ class OrchestratorAgent(LlmAgent):
     def __init__(self) -> None:
         super().__init__(
             name="OrchestratorAgent",
-            model=llm_model(),
+            model=llm_model,
             instruction=(
                 "Coordinate the design pipeline by delegating tasks "
                 "to specialized sub-agents."
