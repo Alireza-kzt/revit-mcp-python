@@ -4,8 +4,9 @@ from dotenv import load_dotenv
 # Load environment variables from .env file if present
 load_dotenv()
 
-# General configuration variables for the project
-MODEL: str = os.getenv("Model", "gemini-1.5-flash")
+# API configuration for LLM models
+LLM_API_BASE_URL: str = os.getenv("LLM_API_BASE_URL")
+LLM_API_KEY: str = os.getenv("LLM_API_KEY")
 
 # Directory containing the revit MCP python package
 REVIT_MCP_PY_DIR: str = os.getenv("REVIT_MCP_PY_DIR", "./revit-mcp-python")

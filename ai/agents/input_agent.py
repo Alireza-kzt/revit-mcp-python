@@ -1,6 +1,6 @@
 from google.adk.agents import LlmAgent
 
-from config import MODEL
+from ai.config import llm_model
 
 
 class InputAgent(LlmAgent):
@@ -9,7 +9,7 @@ class InputAgent(LlmAgent):
     def __init__(self) -> None:
         super().__init__(
             name="InputAgent",
-            model=MODEL,
+            model=llm_model(),
             instruction=(
                 "Gather the user's architectural requirements and output a JSON "
                 "object with keys `rooms` (list of room descriptions) and "

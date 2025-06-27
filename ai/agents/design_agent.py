@@ -1,6 +1,6 @@
 from google.adk.agents import LlmAgent
 
-from config import MODEL
+from ai.config import llm_model
 
 
 class DesignAgent(LlmAgent):
@@ -9,7 +9,7 @@ class DesignAgent(LlmAgent):
     def __init__(self) -> None:
         super().__init__(
             name="DesignAgent",
-            model=MODEL,
+            model=llm_model(),
             instruction=(
                 "Using the provided requirements, propose a simple building layout "
                 "as JSON with `walls` (start,end,height) and `rooms` (name,size)."

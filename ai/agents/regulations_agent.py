@@ -1,6 +1,5 @@
 from google.adk.agents import LlmAgent
-
-from config import MODEL
+from ai.config import llm_model
 
 
 class RegulationsAgent(LlmAgent):
@@ -9,7 +8,7 @@ class RegulationsAgent(LlmAgent):
     def __init__(self) -> None:
         super().__init__(
             name="RegulationsAgent",
-            model=MODEL,
+            model=llm_model(),
             instruction=(
                 "Review the proposed design. If all rooms are at least 9 sqm, "
                 "respond with `{\"approved\": true}`. Otherwise suggest "
