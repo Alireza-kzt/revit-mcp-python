@@ -1,54 +1,8 @@
 from __future__ import annotations
-
-from typing import AsyncGenerator
-
-from google.adk.agents import BaseAgent, LlmAgent
-from google.adk.agents.invocation_context import InvocationContext
-from google.adk.events import Event
-from google.adk.tools.mcp_tool.mcp_toolset import (
-    MCPToolset,
-    StdioServerParameters,
-)
-
-# ---------------------------------------------------------------------------
-# Helper: build the MCP toolset that proxies to revit‑mcp‑python
-# ---------------------------------------------------------------------------
-
+import os
+from google.adk.agents import LlmAgent
+from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, StdioServerParameters
 from config import REVIT_MCP_PY_DIR, MODEL
-
-revit_mcp_toolset = MCPToolset(
-    connection_params=StdioServerParameters(
-        command="uv",
-        args=["--directory", REVIT_MCP_PY_DIR, "run", "main.py"],
-    ),
-    # Expose **all** tools – adjust tool_filter=[...] if you need a subset.
-)
-
-# ---------------------------------------------------------------------------
-# Sub‑agent 1: connectivity / context bootstrap
-# ---------------------------------------------------------------------------
-
-
-class StatusCheckAgent(LlmAgent):
-    """Helper agent that verifies the MCP connection."""
-
-    def __init__(self) -> None:
-        super().__init__(
-            name="RevitStatusChecker",
-            model=MODEL,
-            instruction=(
-                "You are a helper whose sole job is to verify the current connection to "
-                "Autodesk Revit via the MCP server.\n"
-                "Call the function `get_revit_status` without arguments.\n"
-                "If the status response is not OK, apologise and terminate."
-            ),
-            tools=[revit_mcp_toolset],
-        )
-
-
-# ---------------------------------------------------------------------------
-# Sub‑agent 2: main conversational agent with full toolset
-# ---------------------------------------------------------------------------
 
 MAIN_SYSTEM_MESSAGE = """
 You are **RevitAgent**, an expert architectural assistant. You can analyse and
@@ -69,44 +23,23 @@ Guidelines:
 """
 
 
-class ConversationAgent(LlmAgent):
+class RevitAgent(LlmAgent):
     """Main conversational agent with full toolset."""
 
     def __init__(self) -> None:
         super().__init__(
-            name="RevitConversationAgent",
+            name="RevitAgent",
             model=MODEL,
             instruction=MAIN_SYSTEM_MESSAGE,
-            tools=[revit_mcp_toolset],
+            tools=[
+                MCPToolset(
+                    connection_params=StdioServerParameters(
+                        command="fastmcp",
+                        args=[
+                            "run",
+                            os.path.join(REVIT_MCP_PY_DIR, "main.py"),
+                        ],
+                    ),
+                )
+            ],
         )
-
-
-# ---------------------------------------------------------------------------
-# Orchestrator: run status checker then conversation agent
-# ---------------------------------------------------------------------------
-
-
-class RevitAgent(BaseAgent):
-    """Custom orchestrator that guarantees connectivity before conversation."""
-    status_checker: StatusCheckAgent
-    agent: ConversationAgent
-    model_config = {"arbitrary_types_allowed": True}
-
-    def __init__(self) -> None:
-        status_checker = StatusCheckAgent()
-        agent = ConversationAgent()
-
-        super().__init__(
-            name="RevitAgent",
-            status_checker=status_checker,
-            agent=agent,
-            sub_agents=[status_checker, agent],
-        )
-
-    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
-        # 1) Ensure Revit is reachable
-        async for event in self.status_checker.run_async(ctx):
-            yield event
-        # 2) Delegate the actual user query to the conversation agent
-        async for event in self.agent.run_async(ctx):
-            yield event
