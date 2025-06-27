@@ -1,15 +1,15 @@
 import httpx
-from fastmcp import FastMCP, Image, Context
+from mcp.server.fastmcp.server import FastMCP
+from fastmcp.utilities.types import Image
+from fastmcp import Context
 import base64
-from typing import Optional, Dict, Any, Union
+from typing import Dict, Any, Union
 
 # Load configuration variables
-from config import REVIT_HOST, REVIT_PORT, BASE_URL
+from config import BASE_URL
 
 # Create a generic MCP server for interacting with Revit
 mcp = FastMCP("Revit MCP Server")
-
-# Configuration from config.py
 
 
 async def revit_get(endpoint: str, ctx: Context = None, **kwargs) -> Union[Dict, str]:
