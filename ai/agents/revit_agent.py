@@ -31,7 +31,7 @@ class RevitAgent(LlmAgent):
     def __init__(self) -> None:
         super().__init__(
             name="RevitAgent",
-            model=llm_model(),
+            model=llm_model,
             instruction=MAIN_SYSTEM_MESSAGE,
             tools=[
                 MCPToolset(

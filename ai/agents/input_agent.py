@@ -9,7 +9,7 @@ class InputAgent(LlmAgent):
     def __init__(self) -> None:
         super().__init__(
             name="InputAgent",
-            model=llm_model(),
+            model=llm_model,
             instruction=(
                 "Gather the user's architectural requirements and output a JSON "
                 "object with keys `rooms` (list of room descriptions) and "
