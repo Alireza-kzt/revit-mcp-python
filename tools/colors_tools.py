@@ -1,6 +1,6 @@
 """Color tools"""
 
-from mcp.server.fastmcp import Context
+from fastmcp import Context
 from typing import Dict, Any, Optional, List
 
 

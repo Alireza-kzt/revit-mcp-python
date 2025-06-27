@@ -1,6 +1,6 @@
 """Status and model information tools"""
 
-from mcp.server.fastmcp import Context
+from fastmcp import Context
 
 
 def register_status_tools(mcp, revit_get):

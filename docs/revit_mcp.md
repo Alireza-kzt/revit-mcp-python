@@ -271,7 +271,7 @@ Create the corresponding tools for the MCP server in the `tools/` directory (e.g
 # In tools/your_tools.py
 """Your tools for the MCP server."""
 
-from mcp.server.fastmcp import Context
+from fastmcp import Context
 from typing import Dict, Any
 
 def register_your_tools(mcp, revit_get, revit_post, revit_image=None):

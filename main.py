@@ -1,7 +1,6 @@
 import httpx
-from mcp.server.fastmcp.server import FastMCP
+from fastmcp import FastMCP, Context
 from fastmcp.utilities.types import Image
-from fastmcp import Context
 import base64
 from typing import Dict, Any, Union
 

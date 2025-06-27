@@ -1,6 +1,6 @@
 """View-related tools for capturing and listing Revit views"""
 
-from mcp.server.fastmcp import Context
+from fastmcp import Context
 
 
 def register_view_tools(mcp, revit_get, revit_post, revit_image):
