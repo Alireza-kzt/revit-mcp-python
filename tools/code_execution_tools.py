@@ -1,6 +1,6 @@
 """Code execution tools for the MCP server."""
 
-from mcp.server.fastmcp import Context
+from fastmcp import Context
 
 
 def register_code_execution_tools(mcp, revit_get, revit_post, revit_image=None):

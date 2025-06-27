@@ -1,6 +1,6 @@
 """Model structure and hierarchy tools"""
 
-from mcp.server.fastmcp import Context
+from fastmcp import Context
 
 
 def register_model_tools(mcp, revit_get):
