@@ -50,4 +50,5 @@ class RevitAgent(LlmAgent):
                     ),
                 ),
             ],
+            output_key="revit_summary",
         )
