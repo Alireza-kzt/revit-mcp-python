@@ -12,7 +12,7 @@ LLM_API_KEY: str = os.getenv("LLM_API_KEY")
 REVIT_MCP_PY_DIR: str = os.getenv("REVIT_MCP_PY_DIR", "./revit-mcp-python")
 
 # Revit connection information
-REVIT_HOST: str = os.getenv("REVIT_HOST", "localhost")
+REVIT_HOST: str = os.getenv("REVIT_HOST", "127.0.0.1")
 REVIT_PORT: int = int(os.getenv("REVIT_PORT", 48884))
 
 # Base URL for Revit MCP API

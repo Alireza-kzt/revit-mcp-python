@@ -1,7 +1,11 @@
 from __future__ import annotations
 import os
 from google.adk.agents import LlmAgent
-from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, StdioServerParameters
+from google.adk.tools.mcp_tool.mcp_toolset import (
+    MCPToolset,
+    StdioServerParameters,
+    StdioConnectionParams,
+)
 
 from ai.config import llm_model
 from config import REVIT_MCP_PY_DIR
@@ -35,13 +39,15 @@ class RevitAgent(LlmAgent):
             instruction=MAIN_SYSTEM_MESSAGE,
             tools=[
                 MCPToolset(
-                    connection_params=StdioServerParameters(
-                        command="fastmcp",
-                        args=[
-                            "run",
-                            os.path.join(REVIT_MCP_PY_DIR, "main.py"),
-                        ],
+                    connection_params=StdioConnectionParams(
+                        server_params=StdioServerParameters(
+                            command="fastmcp",
+                            args=[
+                                "run",
+                                os.path.join(REVIT_MCP_PY_DIR, "main.py"),
+                            ],
+                        ),
                     ),
-                )
+                ),
             ],
         )
