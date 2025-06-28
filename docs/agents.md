@@ -4,4 +4,4 @@
 * **DesignAgent** - proposes a conceptual layout.
 * **RegulationsAgent** - checks code compliance.
 * **RevitAgent** - applies the design via MCP.
-* **OrchestratorAgent** - manages the workflow using a parent LlmAgent.
+* **OrchestratorAgent** - coordinates the other agents using a Plan‑Re‑Act planner.

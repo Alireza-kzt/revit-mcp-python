@@ -14,4 +14,5 @@ class RegulationsAgent(LlmAgent):
                 "respond with `{\"approved\": true}`. Otherwise suggest "
                 "modifications in JSON."
             ),
+            output_key="review",
         )

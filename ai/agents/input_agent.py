@@ -15,4 +15,5 @@ class InputAgent(LlmAgent):
                 "object with keys `rooms` (list of room descriptions) and "
                 "`style` (overall style keywords)."
             ),
+            output_key="requirements",
         )

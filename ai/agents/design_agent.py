@@ -14,4 +14,5 @@ class DesignAgent(LlmAgent):
                 "Using the provided requirements, propose a simple building layout "
                 "as JSON with `walls` (start,end,height) and `rooms` (name,size)."
             ),
+            output_key="design",
         )
