@@ -433,6 +433,7 @@ The current implementation provides these tools organized by category:
 - **list_families**: Get a flat list of available family types in the current Revit model
   - Parameters: contains (filter), limit (max results)
 - **list_family_categories**: Get a list of all family categories in the current Revit model
+- **create_wall**: Create a straight wall between two points
 
 ### **Code Execution Tools**
 - **execute_revit_code**: Execute IronPython code directly in Revit context
@@ -469,6 +470,7 @@ The pyRevit extension exposes these HTTP endpoints under `http://localhost:48884
 
 ### **Placement Endpoints**
 - `POST /place_family/` - Place family instance with detailed parameters
+- `POST /create_wall/` - Create a straight wall between two points
 - `GET /list_families/` - Get available families and types (supports contains/limit params)
 - `GET /list_family_categories/` - Get family categories with counts
 
@@ -728,3 +730,4 @@ The modular architecture provides several extension points:
 - Log errors appropriately for debugging
 
 This modular approach ensures the codebase remains organized and maintainable while making it easy to add new functionality for specific use cases.
+

@@ -66,6 +66,7 @@ It contains:
 | `create_point_based_element` | ✅ Implemented | Element Creation | Create point-based elements (doors, windows, furniture) |
 | `color_splash` | ✅ Implemented | Visualization | Color elements based on parameter values |
 | `execute_revit_code` | ✅ Implemented | Code Execution | Execute IronPython code directly in Revit context |
+| `create_wall` | ✅ Implemented | Element Creation | Create straight walls between two points |
 | `get_selected_elements` | 🔄 Pending | Selection Management | Get information about currently selected elements |
 | `create_line_based_element` | 🔄 Pending | Element Creation | Create line-based elements (walls, beams, pipes) |
 | `create_surface_based_element` | 🔄 Pending | Element Creation | Create surface-based elements (floors, ceilings) |
@@ -377,3 +378,4 @@ This is a work in progress and more of a demonstration than a fully-featured pro
 
 Contributions are welcome! Feel free to submit pull requests or open issues for any bugs or feature requests.
 Feel free to reach out to me if you have any questions, ideas
+
