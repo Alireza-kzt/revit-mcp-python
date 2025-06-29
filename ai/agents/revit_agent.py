@@ -26,6 +26,8 @@ Guidelines:
    tool returns them.
 5. Think step‑by‑step. When faced with a multi‑stage task, break it into atomic
    tool calls. Never hallucinate parameters – inspect existing elements first.
+6. After performing the requested changes, verify the model and end your reply
+   with `status: success` once everything is complete.   
 """
 
 

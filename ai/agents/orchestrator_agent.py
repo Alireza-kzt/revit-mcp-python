@@ -19,7 +19,8 @@ class OrchestratorAgent(LlmAgent):
                 "1. Use `InputAgent` to collect user requirements.\n"
                 "2. Pass the requirements to `DesignAgent` and store the JSON result in state key `design`.\n"
                 "3. Call `RegulationsAgent` with the design JSON. If it returns `approved: false`, loop back to `DesignAgent` with the suggested modifications until approval.\n"
-                "4. Once approved, invoke `RevitAgent` with the final design to apply changes in Revit."
+                "4. Once approved, invoke `RevitAgent` with the final design to apply changes in Revit.\n"
+                "5. After each RevitAgent action, check the `status` and `revit_summary` state. Don't terminate until contains `status: success`."
             ),
             sub_agents=[
                 InputAgent(),
