@@ -33,6 +33,10 @@ def register_routes():
 
         register_placement_routes(api)
 
+        from revit_mcp.curve_tools import register_curve_tools
+
+        register_curve_tools(api)
+
         from revit_mcp.colors import register_color_routes
 
         register_color_routes(api)
