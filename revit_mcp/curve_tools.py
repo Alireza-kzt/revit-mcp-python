@@ -1,11 +1,12 @@
 # -*- coding: UTF-8 -*-
 """Curve-based element creation routes for Revit MCP"""
 
-from pyrevit import routes, DB
+from pyrevit import routes, DB, revit
 import json
 import logging
 
 from .utils import find_family_symbol_safely, create_line_based_element
+from revit_mcp.revit.utils.wall_utils import get_default_wall_type
 
 logger = logging.getLogger(__name__)
 
@@ -25,10 +26,21 @@ def register_curve_tools(api):
             data = json.loads(request.data) if isinstance(request.data, str) else request.data
             family_name = data.get('family_name')
             type_name = data.get('type_name')
+            category = data.get('category')
             start = data.get('start')
             end = data.get('end')
             level_name = data.get('level_name')
             structural = data.get('structural', False)
+
+            if (category == 'Walls') and not family_name:
+                wall_type = get_default_wall_type(doc)
+                if not wall_type:
+                    return routes.make_response(
+                        data={'error': 'No default wall type available'},
+                        status=400,
+                    )
+                family_name = wall_type.Family.Name
+                type_name = wall_type.Name
 
             if not family_name or not start or not end:
                 return routes.make_response(

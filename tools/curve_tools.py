@@ -8,7 +8,7 @@ def register_curve_tools(mcp, revit_get, revit_post):
 
     @mcp.tool()
     async def create_line_based_element(
-        family_name: str,
+        family_name: str = None,
         type_name: str = None,
         start_x: float = 0.0,
         start_y: float = 0.0,
