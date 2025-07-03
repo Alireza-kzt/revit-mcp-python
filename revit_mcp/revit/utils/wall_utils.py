@@ -48,9 +48,9 @@ def get_default_wall_type(doc=None):
                 name = None
 
             if (
-                wt.Kind == DB.WallKind.Basic
-                and name
-                and ("Generic" in name or "Basic" in name)
+                    wt.Kind == DB.WallKind.Basic
+                    and name
+                    and ("Generic" in name or "Basic" in name)
             ):
                 return wt
 
@@ -58,4 +58,3 @@ def get_default_wall_type(doc=None):
         logger.debug("Error getting default wall type: %s", err)
 
     return None
-
