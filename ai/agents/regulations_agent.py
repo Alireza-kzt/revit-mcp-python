@@ -11,7 +11,7 @@ class RegulationsAgent(LlmAgent):
             model=llm_model,
             instruction=(
                 "Review the proposed design. If all rooms are at least 9 sqm, "
-                "respond with `{\"approved\": true}`. Otherwise suggest "
+                'respond with `{"approved": true}`. Otherwise suggest '
                 "modifications in JSON."
             ),
             output_key="review",

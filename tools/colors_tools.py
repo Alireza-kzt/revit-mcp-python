@@ -42,7 +42,11 @@ def register_colors_tools(mcp, revit_get, revit_post, revit_image=None):
             if custom_colors:
                 data["custom_colors"] = custom_colors
 
-            ctx.info("Color splashing {} elements by {}".format(category_name, parameter_name))
+            ctx.info(
+                "Color splashing {} elements by {}".format(
+                    category_name, parameter_name
+                )
+            )
             return await revit_post("/color_splash/", data, ctx)
 
         except Exception as e:
@@ -94,7 +98,9 @@ def register_colors_tools(mcp, revit_get, revit_post, revit_image=None):
         try:
             data = {"category_name": category_name}
 
-            ctx.info("Getting available parameters for {} category".format(category_name))
+            ctx.info(
+                "Getting available parameters for {} category".format(category_name)
+            )
             return await revit_post("/list_category_parameters/", data, ctx)
 
         except Exception as e:
