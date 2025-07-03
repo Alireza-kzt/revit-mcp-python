@@ -24,8 +24,9 @@ revit-mcp-python/
 │   ├── status_tools.py                       # Status and connectivity tools
 │   ├── model_tools.py                        # Model information tools
 │   ├── view_tools.py                         # View export and image tools
-│   └── family_tools.py                       # Family placement and management tools
-|   └── colors_tools.py                       # Color splashing tools
+│   ├── family_tools.py                       # Family placement and management tools
+│   ├── colors_tools.py                       # Color splashing tools
+│   ├── curve_tools.py                        # Curve element creation tools
 │   └── code_execution_tools.py               # Code execution tools
 ├── revit-mcp-python.extension/               # pyRevit Extension
 │   ├── startup.py                            # Extension entry point - registers all routes
@@ -35,8 +36,9 @@ revit-mcp-python/
 │       ├── model_info.py                     # Model information endpoints
 │       ├── views.py                          # View export endpoints
 │       ├── placement.py                      # Family placement endpoints
-│       └── utils.py                          # Utility functions for IronPython compatibility
-│       └── colors.py                         # Color splashing endpoints
+│       ├── utils.py                          # Utility functions for IronPython compatibility
+│       ├── colors.py                         # Color splashing endpoints
+│       ├── curve_tools.py                    # Curve element creation endpoints
 │       └── code_execution.py                 # Code execution endpoints
 ├── requirements.txt                          # Python dependencies
 ├── pyproject.toml                           # Project configuration
@@ -442,6 +444,11 @@ The current implementation provides these tools organized by category:
   - Handles transactions automatically for model modifications
   - Use when existing MCP tools cannot accomplish the needed functionality
 
+### **Curve Element Tools**
+- **create_line_based_element**: Create a curve-based element (wall, beam, etc.) between two points
+  - Parameters: family_name, type_name, start_x, start_y, start_z, end_x, end_y, end_z, level_name, structural
+  - If placing walls and no family is provided, the default wall type is used automatically
+
 ### **Color Splashing Tools**
 - **splash_color**: Apply a color to all elements of a specific category in the Revit model
   - Parameters: category_name, color (RGB tuple)
@@ -471,6 +478,9 @@ The pyRevit extension exposes these HTTP endpoints under `http://localhost:48884
 - `POST /place_family/` - Place family instance with detailed parameters
 - `GET /list_families/` - Get available families and types (supports contains/limit params)
 - `GET /list_family_categories/` - Get family categories with counts
+
+### **Curve Element Endpoints**
+- `POST /create_line_based_element/` - Create walls or other curve-based family elements between two points
 
 ### **Code Execution Endpoints**
 - `POST /execute_code/` - Execute IronPython code in Revit context
