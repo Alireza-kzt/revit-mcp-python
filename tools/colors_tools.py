@@ -1,7 +1,7 @@
 """Color tools"""
 
 from fastmcp import Context
-from typing import Dict, Any, Optional, List
+from typing import Optional, List
 
 
 def register_colors_tools(mcp, revit_get, revit_post, revit_image=None):

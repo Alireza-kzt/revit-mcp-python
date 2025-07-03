@@ -51,12 +51,12 @@ def register_code_execution_tools(mcp, revit_get, revit_post, revit_image=None):
             payload = {"code": code, "description": description}
 
             if ctx:
-                ctx.info("Executing code: {}".format(description))
+                await ctx.info("Executing code: {}".format(description))
 
             return await revit_post("/execute_code/", payload, ctx)
 
         except (ConnectionError, ValueError, RuntimeError) as e:
             error_msg = "Error during code execution: {}".format(str(e))
             if ctx:
-                ctx.error(error_msg)
+                await ctx.error(error_msg)
             return error_msg

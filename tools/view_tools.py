@@ -30,7 +30,7 @@ def register_view_tools(mcp, revit_get, revit_post, revit_image):
         - Template status
         """
         if ctx:
-            ctx.info("Getting current view information...")
+            await ctx.info("Getting current view information...")
         return await revit_get("/current_view_info/", ctx)
 
     @mcp.tool()
@@ -49,5 +49,5 @@ def register_view_tools(mcp, revit_get, revit_post, revit_image):
         and analyzing the content of the active view.
         """
         if ctx:
-            ctx.info("Getting elements in current view...")
+            await ctx.info("Getting elements in current view...")
         return await revit_get("/current_view_elements/", ctx)
