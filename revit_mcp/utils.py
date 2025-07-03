@@ -40,7 +40,15 @@ def find_family_symbol_safely(doc, target_family_name, target_type_name=None):
         return None
 
 
-def create_line_based_element(doc, family_symbol, start_xyz, end_xyz, level=None, *, structural_type=DB.Structure.StructuralType.NonStructural, transaction_name="Create line-based element"):
+def create_line_based_element(
+    doc,
+    family_symbol,
+    start_xyz,
+    end_xyz,
+    level=None,
+    structural_type=DB.Structure.StructuralType.NonStructural,
+    transaction_name="Create line-based element",
+):
     """Place a curve-based family instance using the Revit API."""
     if family_symbol is None:
         raise ValueError("family_symbol is None")
