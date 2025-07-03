@@ -9,7 +9,7 @@ LLM_API_BASE_URL: str = os.getenv("LLM_API_BASE_URL")
 LLM_API_KEY: str = os.getenv("LLM_API_KEY")
 
 # Directory containing the revit MCP python package
-REVIT_MCP_PY_DIR: str = os.getenv("REVIT_MCP_PY_DIR", "./revit-mcp-python")
+REVIT_MCP_PY_DIR: str = os.getenv("REVIT_MCP_PY_DIR")
 
 # Revit connection information
 REVIT_HOST: str = os.getenv("REVIT_HOST", "127.0.0.1")
