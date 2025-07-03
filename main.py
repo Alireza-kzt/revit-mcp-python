@@ -16,7 +16,9 @@ async def revit_get(endpoint: str, ctx: Context = None, **kwargs) -> Union[Dict,
     return await _revit_call("GET", endpoint, ctx=ctx, **kwargs)
 
 
-async def revit_post(endpoint: str, data: Dict[str, Any], ctx: Context = None, **kwargs) -> Union[Dict, str]:
+async def revit_post(
+    endpoint: str, data: Dict[str, Any], ctx: Context = None, **kwargs
+) -> Union[Dict, str]:
     """Simple POST request to Revit API"""
     return await _revit_call("POST", endpoint, data=data, ctx=ctx, **kwargs)
 
@@ -37,8 +39,14 @@ async def revit_image(endpoint: str, ctx: Context = None) -> Union[Image, str]:
         return f"Error: {e}"
 
 
-async def _revit_call(method: str, endpoint: str, data: Dict = None, ctx: Context = None,
-                      timeout: float = 30.0, params: Dict = None) -> Union[Dict, str]:
+async def _revit_call(
+    method: str,
+    endpoint: str,
+    data: Dict = None,
+    ctx: Context = None,
+    timeout: float = 30.0,
+    params: Dict = None,
+) -> Union[Dict, str]:
     """Internal function handling all HTTP calls"""
     try:
         async with httpx.AsyncClient(timeout=timeout) as client:
@@ -47,9 +55,15 @@ async def _revit_call(method: str, endpoint: str, data: Dict = None, ctx: Contex
             if method == "GET":
                 response = await client.get(url, params=params)
             else:  # POST
-                response = await client.post(url, json=data, headers={"Content-Type": "application/json"})
+                response = await client.post(
+                    url, json=data, headers={"Content-Type": "application/json"}
+                )
 
-            return response.json() if response.status_code == 200 else f"Error: {response.status_code} - {response.text}"
+            return (
+                response.json()
+                if response.status_code == 200
+                else f"Error: {response.status_code} - {response.text}"
+            )
     except Exception as e:
         return f"Error: {e}"
 

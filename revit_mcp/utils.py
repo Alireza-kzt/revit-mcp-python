@@ -80,7 +80,8 @@ def create_line_based_element(
             view = doc.ActiveView
             instance = doc.Create.NewFamilyInstance(curve, family_symbol, view)
         else:
-            instance = doc.Create.NewFamilyInstance(curve, family_symbol, level, structural_type)
+            instance = doc.Create.NewFamilyInstance(
+                curve, family_symbol, level, structural_type
+            )
 
     return instance
-

@@ -5,7 +5,7 @@ from fastmcp import Context
 
 def register_model_tools(mcp, revit_get):
     """Register model structure tools"""
-    
+
     @mcp.tool()
     async def list_levels(ctx: Context = None) -> str:
         """Get a list of all levels in the current Revit model"""

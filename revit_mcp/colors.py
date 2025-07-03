@@ -115,19 +115,19 @@ def generate_gradient_colors(count, start_color=(255, 0, 0), end_color=(0, 0, 25
     r_step = float((end_color_obj.R - start_color_obj.R) / count)
     g_step = float((end_color_obj.G - start_color_obj.G) / count)
     b_step = float((end_color_obj.B - start_color_obj.B) / count)
-    
+
     colors = []
     for index in range(count):
         a = max(start_color_obj.A + int(a_step * index) - 1, 0)
         r = max(start_color_obj.R + int(r_step * index) - 1, 0)
         g = max(start_color_obj.G + int(g_step * index) - 1, 0)
         b = max(start_color_obj.B + int(b_step * index) - 1, 0)
-        
+
         # Ensure values are within valid range
         r = max(0, min(255, r))
         g = max(0, min(255, g))
         b = max(0, min(255, b))
-        
+
         color = DB.Color(r, g, b)
         colors.append(color)
 
@@ -343,7 +343,7 @@ def clean_parameter_value_for_json(param_value):
 def get_parameter_value_json_safe(element, parameter_name):
     """
     JSON-safe parameter value extraction - updated to use sorting-optimized method
-    
+
     Args:
         element: Revit element
         parameter_name (str): Name of the parameter
@@ -352,7 +352,9 @@ def get_parameter_value_json_safe(element, parameter_name):
         str: JSON-safe parameter value as string, or "None" if not found
     """
     try:
-        raw_value, display_value = get_parameter_value_for_sorting(element, parameter_name)
+        raw_value, display_value = get_parameter_value_for_sorting(
+            element, parameter_name
+        )
         return clean_parameter_value_for_json(display_value)
     except Exception as e:
         logger.error("Error getting parameter %s from element: %s", parameter_name, e)
@@ -406,46 +408,46 @@ def generate_random_color():
 def safe_float_conversion(value_str):
     """
     Safely convert a string value to float for sorting, based on script.py approach
-    
+
     Args:
         value_str (str): String value to convert
-        
+
     Returns:
         float: Converted value or infinity for non-numeric values
     """
     if not value_str or value_str == "None":
-        return float('inf')  # Put "None" values at the end
-    
+        return float("inf")  # Put "None" values at the end
+
     try:
         # Handle unit suffixes like in script.py
         clean_value = str(value_str).strip()
-        
+
         # Check if it has unit suffix (non-digit characters at the end)
         suffix_index = 0
         for char in reversed(clean_value):
-            if char.isdigit() or char == '.' or char == '-' or char == '+':
+            if char.isdigit() or char == "." or char == "-" or char == "+":
                 break
             suffix_index += 1
-        
+
         if suffix_index > 0:
             # Remove unit suffix
             numeric_part = clean_value[:-suffix_index]
         else:
             numeric_part = clean_value
-            
+
         return float(numeric_part)
     except (ValueError, TypeError):
-        return float('inf')  # Non-numeric values go to end
+        return float("inf")  # Non-numeric values go to end
 
 
 def get_parameter_value_for_sorting(element, parameter_name):
     """
     Get parameter value optimized for numeric sorting, following script.py pattern
-    
+
     Args:
         element: Revit element
         parameter_name (str): Name of the parameter
-        
+
     Returns:
         tuple: (raw_value, display_value) for sorting and display
     """
@@ -455,39 +457,43 @@ def get_parameter_value_for_sorting(element, parameter_name):
             if param.Definition.Name == parameter_name:
                 if not param.HasValue:
                     return ("None", "None")
-                
+
                 if param.StorageType == DB.StorageType.Double:
                     # Get both raw and display values
                     raw_value = param.AsDouble()
                     display_value = param.AsValueString() or str(raw_value)
                     return (raw_value, display_value)
-                    
+
                 elif param.StorageType == DB.StorageType.Integer:
                     # Handle Yes/No and regular integers
                     try:
                         if hasattr(param.Definition, "GetDataType"):
                             param_type = param.Definition.GetDataType()
-                            if hasattr(DB, "SpecTypeId") and hasattr(DB.SpecTypeId, "Boolean"):
+                            if hasattr(DB, "SpecTypeId") and hasattr(
+                                DB.SpecTypeId, "Boolean"
+                            ):
                                 if param_type == DB.SpecTypeId.Boolean.YesNo:
-                                    bool_val = "True" if param.AsInteger() == 1 else "False"
+                                    bool_val = (
+                                        "True" if param.AsInteger() == 1 else "False"
+                                    )
                                     return (bool_val, bool_val)
                         elif hasattr(param.Definition, "ParameterType"):
                             param_type = param.Definition.ParameterType
                             if param_type == DB.ParameterType.YesNo:
                                 bool_val = "True" if param.AsInteger() == 1 else "False"
                                 return (bool_val, bool_val)
-                        
+
                         int_value = param.AsInteger()
                         display_value = param.AsValueString() or str(int_value)
                         return (int_value, display_value)
                     except:
                         int_value = param.AsInteger()
                         return (int_value, str(int_value))
-                        
+
                 elif param.StorageType == DB.StorageType.String:
                     string_value = param.AsString() or "None"
                     return (string_value, string_value)
-                    
+
                 elif param.StorageType == DB.StorageType.ElementId:
                     id_val = param.AsElementId()
                     if id_val and id_val != DB.ElementId.InvalidElementId:
@@ -502,7 +508,7 @@ def get_parameter_value_for_sorting(element, parameter_name):
                 else:
                     value_str = param.AsValueString() or "None"
                     return (value_str, value_str)
-        
+
         # Try type parameters if not found in instance
         try:
             element_type = element.Document.GetElement(element.GetTypeId())
@@ -511,37 +517,47 @@ def get_parameter_value_for_sorting(element, parameter_name):
                     if param.Definition.Name == parameter_name:
                         if not param.HasValue:
                             return ("None", "None")
-                        
+
                         if param.StorageType == DB.StorageType.Double:
                             raw_value = param.AsDouble()
                             display_value = param.AsValueString() or str(raw_value)
                             return (raw_value, display_value)
-                            
+
                         elif param.StorageType == DB.StorageType.Integer:
                             try:
                                 if hasattr(param.Definition, "GetDataType"):
                                     param_type = param.Definition.GetDataType()
-                                    if hasattr(DB, "SpecTypeId") and hasattr(DB.SpecTypeId, "Boolean"):
+                                    if hasattr(DB, "SpecTypeId") and hasattr(
+                                        DB.SpecTypeId, "Boolean"
+                                    ):
                                         if param_type == DB.SpecTypeId.Boolean.YesNo:
-                                            bool_val = "True" if param.AsInteger() == 1 else "False"
+                                            bool_val = (
+                                                "True"
+                                                if param.AsInteger() == 1
+                                                else "False"
+                                            )
                                             return (bool_val, bool_val)
                                 elif hasattr(param.Definition, "ParameterType"):
                                     param_type = param.Definition.ParameterType
                                     if param_type == DB.ParameterType.YesNo:
-                                        bool_val = "True" if param.AsInteger() == 1 else "False"
+                                        bool_val = (
+                                            "True"
+                                            if param.AsInteger() == 1
+                                            else "False"
+                                        )
                                         return (bool_val, bool_val)
-                                
+
                                 int_value = param.AsInteger()
                                 display_value = param.AsValueString() or str(int_value)
                                 return (int_value, display_value)
                             except:
                                 int_value = param.AsInteger()
                                 return (int_value, str(int_value))
-                                
+
                         elif param.StorageType == DB.StorageType.String:
                             string_value = param.AsString() or "None"
                             return (string_value, string_value)
-                            
+
                         elif param.StorageType == DB.StorageType.ElementId:
                             id_val = param.AsElementId()
                             if id_val and id_val != DB.ElementId.InvalidElementId:
@@ -558,9 +574,9 @@ def get_parameter_value_for_sorting(element, parameter_name):
                             return (value_str, value_str)
         except:
             pass
-            
+
         return ("None", "None")
-        
+
     except Exception as e:
         logger.debug("Error getting parameter %s from element: %s", parameter_name, e)
         return ("None", "None")
@@ -617,11 +633,13 @@ def color_elements_by_parameter(
         value_data = {}  # Store both raw and display values
 
         for element in elements:
-            raw_value, display_value = get_parameter_value_for_sorting(element, parameter_name)
-            
+            raw_value, display_value = get_parameter_value_for_sorting(
+                element, parameter_name
+            )
+
             # Use display value as key for grouping
             parameter_groups[display_value].append(element)
-            
+
             # Store raw value for sorting
             if display_value not in value_data:
                 value_data[display_value] = raw_value
@@ -630,34 +648,36 @@ def color_elements_by_parameter(
         def sort_key(display_value):
             """Advanced sorting key that handles different data types"""
             raw_value = value_data[display_value]
-            
+
             # Handle None values
             if display_value == "None" or raw_value == "None":
                 return (2, 0)  # Put None at the end
-            
+
             # Handle boolean values
             if display_value in ["True", "False"]:
                 return (1, 0 if display_value == "False" else 1)
-            
+
             # Handle numeric values (int or float)
             if isinstance(raw_value, (int, float)):
                 return (0, raw_value)
-            
+
             # Handle string values that might contain numbers
             try:
                 numeric_sort_value = safe_float_conversion(display_value)
-                if numeric_sort_value != float('inf'):
+                if numeric_sort_value != float("inf"):
                     return (0, numeric_sort_value)
             except:
                 pass
-            
+
             # Fallback to string sorting
             return (1.5, str(display_value).lower())
 
         unique_values = sorted(parameter_groups.keys(), key=sort_key)
         value_count = len(unique_values)
 
-        logger.info("Sorted values for gradient: %s", unique_values[:10])  # Log first 10 for debugging
+        logger.info(
+            "Sorted values for gradient: %s", unique_values[:10]
+        )  # Log first 10 for debugging
 
         # Generate colors based on the sorted order
         if custom_colors:
@@ -692,22 +712,30 @@ def color_elements_by_parameter(
 
             # Ensure we have enough colors
             if len(colors) < value_count:
-                logger.warning("Not enough colors generated. Expected %d, got %d", value_count, len(colors))
+                logger.warning(
+                    "Not enough colors generated. Expected %d, got %d",
+                    value_count,
+                    len(colors),
+                )
                 additional_needed = value_count - len(colors)
                 additional_colors = generate_distinct_colors(additional_needed)
                 colors.extend(additional_colors)
 
             for i, param_value in enumerate(unique_values):
                 group_elements = parameter_groups[param_value]
-                
+
                 # Get color for this group
                 if i < len(colors):
                     color = colors[i]
                 else:
-                    logger.warning("Color index out of bounds for value %s at index %d", param_value, i)
+                    logger.warning(
+                        "Color index out of bounds for value %s at index %d",
+                        param_value,
+                        i,
+                    )
                     rgb = generate_random_color()
                     color = DB.Color(rgb[0], rgb[1], rgb[2])
-                
+
                 color_assignments[param_value] = {
                     "color": safe_color_to_hex(color),
                     "element_count": len(group_elements),
@@ -726,7 +754,9 @@ def color_elements_by_parameter(
                 for element in group_elements:
                     try:
                         # Get all 3D views to apply override
-                        view_collector = DB.FilteredElementCollector(doc).OfClass(DB.View3D)
+                        view_collector = DB.FilteredElementCollector(doc).OfClass(
+                            DB.View3D
+                        )
                         for view in view_collector:
                             if not view.IsTemplate:
                                 view.SetElementOverrides(element.Id, override_settings)

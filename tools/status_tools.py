@@ -5,7 +5,7 @@ from fastmcp import Context
 
 def register_status_tools(mcp, revit_get):
     """Register status-related tools"""
-    
+
     @mcp.tool()
     async def get_revit_status(ctx: Context) -> str:
         """Check if the Revit MCP API is active and responding"""
