@@ -113,7 +113,7 @@ def register_placement_routes(api):
                         :50
                     ]:  # Limit to prevent overwhelming response
                         try:
-                            family_name_safe = get_element_name(symbol)
+                            family_name_safe = get_element_name(symbol.Family)
                             family_names.add(family_name_safe)
                         except:
                             continue
@@ -323,7 +323,7 @@ def register_placement_routes(api):
                 if len(families) >= 50:
                     break
                 try:
-                    family_name = get_element_name(symbol)
+                    family_name = get_element_name(symbol.Family)
                     type_name = get_element_name(symbol)
                     category = symbol.Category.Name if symbol.Category else "Unknown"
                     is_active = symbol.IsActive

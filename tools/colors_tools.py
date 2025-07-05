@@ -42,12 +42,12 @@ def register_colors_tools(mcp, revit_get, revit_post, revit_image=None):
             if custom_colors:
                 data["custom_colors"] = custom_colors
 
-            ctx.info("Color splashing {} elements by {}".format(category_name, parameter_name))
+            await ctx.info("Color splashing {} elements by {}".format(category_name, parameter_name))
             return await revit_post("/color_splash/", data, ctx)
 
         except Exception as e:
             error_msg = "Error applying color splash: {}".format(str(e))
-            ctx.error(error_msg)
+            await ctx.error(error_msg)
             return error_msg
 
     @mcp.tool()
@@ -68,12 +68,12 @@ def register_colors_tools(mcp, revit_get, revit_post, revit_image=None):
         try:
             data = {"category_name": category_name}
 
-            ctx.info("Clearing color overrides for {} elements".format(category_name))
+            await ctx.info("Clearing color overrides for {} elements".format(category_name))
             return await revit_post("/clear_colors/", data, ctx)
 
         except Exception as e:
             error_msg = "Error clearing colors: {}".format(str(e))
-            ctx.error(error_msg)
+            await ctx.error(error_msg)
             return error_msg
 
     @mcp.tool()
@@ -94,10 +94,10 @@ def register_colors_tools(mcp, revit_get, revit_post, revit_image=None):
         try:
             data = {"category_name": category_name}
 
-            ctx.info("Getting available parameters for {} category".format(category_name))
+            await ctx.info("Getting available parameters for {} category".format(category_name))
             return await revit_post("/list_category_parameters/", data, ctx)
 
         except Exception as e:
             error_msg = "Error listing category parameters: {}".format(str(e))
-            ctx.error(error_msg)
+            await ctx.error(error_msg)
             return error_msg

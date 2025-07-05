@@ -67,7 +67,7 @@ It contains:
 | `color_splash` | ✅ Implemented | Visualization | Color elements based on parameter values |
 | `execute_revit_code` | ✅ Implemented | Code Execution | Execute IronPython code directly in Revit context |
 | `get_selected_elements` | 🔄 Pending | Selection Management | Get information about currently selected elements |
-| `create_line_based_element` | ✅ Implemented | Element Creation | Create line-based elements (walls, beams, pipes) |
+| `create_line_based_element` | 🔄 Pending  | Element Creation | Create line-based elements (walls, beams, pipes) |
 | `create_surface_based_element` | 🔄 Pending | Element Creation | Create surface-based elements (floors, ceilings) |
 | `delete_elements` | 🔄 Pending | Element Management | Delete specified elements from the model |
 | `modify_element` | 🔄 Pending | Element Management | Modify element properties (instance parameters) |
